@@ -9,7 +9,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"hash/fnv"
+	"github.com/DCSO/bloom/fnv1"
 	"io"
 	"io/ioutil"
 	"math"
@@ -200,9 +200,9 @@ const g uint64 = 18446744073709550147
 // Fingerprint returns the fingerprint of a given value, as an array of index
 // values.
 func (s *BloomFilter) Fingerprint(value []byte, fingerprint []uint64) {
-	hv := fnv.New64()
-	hv.Write(value)
-	hn := hv.Sum64() % m
+	//hv := fnv.New64()
+	hv := fnv1.Hash64(value)
+	hn := hv % m
 
 	for i := uint64(0); i < s.k; i++ {
 		hn = (hn * g) % m
